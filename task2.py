@@ -1,35 +1,82 @@
-# Your program should start at this line.
-# Example:
-# move()
-# move()
-# move()
-# turn()
-# move()
-# move()
-# turn()
-# turn()
-# turn()
-# move()
+import time
 
-
-
-# region Basic functions
-# These functions are just here to make your code work conceptually.
+current_x = 11
+current_y = 8
+current_direction = 'left'
+obstacles = [(7, 8), (8, 5), (14, 6), (13, 11), (5, 10), (6, 3), (16, 4), (15, 13), (3, 12), (4, 1), (18, 2), (17, 15), (1, 14)]
 
 def move():
-    # Moves the car 1 cell in the direction it is heading.
-    pass
+    time.sleep(0.2)
+    global current_x, current_y
+
+    if peek():
+        if current_direction == 'up':
+            current_y -= 1
+        elif current_direction == 'down':
+            current_y += 1
+        elif current_direction == 'left':
+            current_x -= 1
+        elif current_direction == 'right':
+            current_x += 1
+    else:
+        turn()
+
+
+def turn_clockwise():
+    global current_direction
+    if current_direction == 'up':
+        current_direction = 'right'
+    elif current_direction == 'right':
+        current_direction = 'down'
+    elif current_direction == 'down':
+        current_direction = 'left'
+    elif current_direction == 'left':
+        current_direction = 'up'
+
+    print("Turned clockwise. New direction:", current_direction)
+
 
 def turn():
-    # Turns the car 90 degrees clockwise.
-    pass
+    global current_direction
+    turn_clockwise()
+    if peek():
+        pass
+    else:
+        for _ in range(2):
+            turn_clockwise()
+
 
 def peek():
-    # Returns True if the next cell is open, otherwise False.
-    return True  # Just a placeholder value.
+    global current_x, current_y, current_direction
+    next_x, next_y = current_x, current_y
+    if current_direction == 'up':
+        next_y -= 1
+    elif current_direction == 'down':
+        next_y += 1
+    elif current_direction == 'left':
+        next_x -= 1
+    elif current_direction == 'right':
+        next_x += 1
+    return (next_x, next_y) not in obstacles
+
 
 def at_goal():
-    # Returns True if the current cell is the goal cell.
-    return True  # Just a placeholder.
+    return (current_x, current_y) == (2, 1)
 
-#endregion
+
+def navigate_maze():
+    time.sleep(0.2)
+    while not at_goal():
+        if peek():
+            move()
+        else:
+            while not peek():
+                turn()
+            move()
+
+        print("Moved to:", current_x, "X,", current_y, "Y -", "Direction:", current_direction)
+
+    print("Goal reached at:", current_x, "X,", current_y, "Y",)
+
+
+navigate_maze()
