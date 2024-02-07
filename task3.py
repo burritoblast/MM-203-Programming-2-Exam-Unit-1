@@ -6,10 +6,24 @@ current_direction = 'left'
 obstacles = [(1, 15), (2, 12), (13, 13), (12, 14), (12, 10), (13, 11), (1, 11), (2, 8), (13, 9), (12, 1), (13, 2), (9, 2), (10, 1), (10, 8), (7, 7), (8, 1), (9, 2), (5, 2), (6, 1), (6, 8), (3, 7), (4, 1), (5, 2)]
 
 def move():
+    pass
+
+def turn():
+    pass
+
+def peek():
+    return True
+
+def at_goal():
+    return True
+
+
+def move_forward():
+    move()
     time.sleep(0.2)
     global current_x, current_y
 
-    if peek():
+    if peek_next():
         if current_direction == 'up':
             current_y -= 1
         elif current_direction == 'down':
@@ -19,7 +33,7 @@ def move():
         elif current_direction == 'right':
             current_x += 1
     else:
-        turn()
+        turner()
 
 
 def turn_clockwise():
@@ -36,17 +50,19 @@ def turn_clockwise():
     print("Turned clockwise. New direction:", current_direction)
 
 
-def turn():
+def turner():
+    turn()
     global current_direction
     turn_clockwise()
-    if peek():
+    if peek_next():
         pass
     else:
         for _ in range(2):
             turn_clockwise()
 
 
-def peek():
+def peek_next():
+    peek()
     global current_x, current_y, current_direction
     next_x, next_y = current_x, current_y
     if current_direction == 'up':
@@ -60,19 +76,19 @@ def peek():
     return (next_x, next_y) not in obstacles
 
 
-def at_goal():
+def is_at_goal():
+    at_goal()
     return (current_x, current_y) == (1, 2)
 
 
 def navigate_maze():
-    time.sleep(0.2)
-    while not at_goal():
-        if peek():
-            move()
+    while not is_at_goal():
+        if peek_next():
+            move_forward()
         else:
-            while not peek():
-                turn()
-            move()
+            while not peek_next():
+                turner()
+            move_forward()
 
         print("Moved to:", current_x, "X,", current_y, "Y -", "Direction:", current_direction)
 
